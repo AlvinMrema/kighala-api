@@ -42,6 +42,40 @@ func (q *Queries) CreateWord(ctx context.Context, arg CreateWordParams) (Word, e
 	return i, err
 }
 
+const getWordById = `-- name: GetWordById :one
+SELECT id, created_at, updated_at, word FROM words
+WHERE id = $1
+`
+
+func (q *Queries) GetWordById(ctx context.Context, id uuid.UUID) (Word, error) {
+	row := q.db.QueryRowContext(ctx, getWordById, id)
+	var i Word
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Word,
+	)
+	return i, err
+}
+
+const getWordByValue = `-- name: GetWordByValue :one
+SELECT id, created_at, updated_at, word FROM words
+WHERE word = $1
+`
+
+func (q *Queries) GetWordByValue(ctx context.Context, word string) (Word, error) {
+	row := q.db.QueryRowContext(ctx, getWordByValue, word)
+	var i Word
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Word,
+	)
+	return i, err
+}
+
 const getWords = `-- name: GetWords :many
 SELECT id, created_at, updated_at, word FROM words
 `
