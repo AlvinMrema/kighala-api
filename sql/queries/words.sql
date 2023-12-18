@@ -5,3 +5,11 @@ RETURNING *;
 
 -- name: GetWords :many
 SELECT * FROM words;
+
+-- name: GetWordById :one
+SELECT * FROM words
+WHERE id = $1;
+
+-- name: GetWordByValue :one
+SELECT * FROM words
+WHERE word = $1;
