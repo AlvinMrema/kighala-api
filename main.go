@@ -53,8 +53,6 @@ func main() {
 		MaxAge:           300,
 	}))
 
-	app.Get("/test", apiCfg.handleTest)
-
 	api := app.Group("/api")
 
 	dictionary := api.Group("/kamusi")
