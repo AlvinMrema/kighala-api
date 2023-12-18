@@ -17,16 +17,6 @@ type apiConfig struct {
 	DB *database.Queries
 }
 
-func (apiCfg *apiConfig) handleCreateWord(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"type":     "https://example.com/probs/out-of-credit",
-		"title":    "You do not have enough credit.",
-		"status":   403,
-		"detail":   "Your current balance is 30, but that costs 50.",
-		"instance": "/account/12345/msgs/abc",
-	}, "application/problem+json")
-}
-
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -55,32 +45,21 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:   "https://*, http://*",
-		AllowMethods:   "GET, POST, PUT, DELETE, OPTIONS",
-		AllowHeaders:   "*",
-		ExposeHeaders:   "Link",
+		AllowOrigins:     "https://*, http://*",
+		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
+		AllowHeaders:     "*",
+		ExposeHeaders:    "Link",
 		AllowCredentials: false,
 		MaxAge:           300,
 	}))
 
-	// app.Get("/", func(c *fiber.Ctx) error {
-	// 	return c.SendString("Hello, Alvin!")
-	// })
+	app.Get("/test", apiCfg.handleTest)
 
-	// app.Get("/:value", func(c *fiber.Ctx) error {
-	// 	return c.SendString("value: " + c.Params("value"))
-	// 	// => Get request with value: hello world
-	// })
+	api := app.Group("/api")
 
-	// app.Get("/:name?", func(c *fiber.Ctx) error {
-	// 	if c.Params("name") != "" {
-	// 		return c.SendString("Hello " + c.Params("name"))
-	// 		// => Hello john
-	// 	}
-	// 	return c.SendString("Where is john?")
-	// })
+	dictionary := api.Group("/kamusi")
+	dictionary.Get("/words", apiCfg.handleGetWords)
+	dictionary.Post("/words", apiCfg.handleCreateWord)
 
-	app.Get("/test", apiCfg.handleCreateWord)
-
-	app.Listen(":3000")
+	log.Fatal(app.Listen(":3000"))
 }
