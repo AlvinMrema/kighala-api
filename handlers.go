@@ -67,3 +67,28 @@ func (apiCfg *apiConfig) handleGetWords(c *fiber.Ctx) error {
 		"results": results,
 	})
 }
+
+func (apiCfg *apiConfig) handleGetWordById(c *fiber.Ctx) error {
+	wordId, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	db, err := apiCfg.DB.GetWordById(c.Context(), wordId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseWordToWord(db)
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
