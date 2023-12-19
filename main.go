@@ -58,6 +58,7 @@ func main() {
 	dictionary := api.Group("/kamusi")
 	dictionary.Get("/words", apiCfg.handleGetWords)
 	dictionary.Post("/words", apiCfg.handleCreateWord)
+	dictionary.Get("/words/:id", apiCfg.handleGetWordById)
 
 	log.Fatal(app.Listen(":3000"))
 }
