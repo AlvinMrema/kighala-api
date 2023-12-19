@@ -59,6 +59,8 @@ func main() {
 	dictionary.Get("/words", apiCfg.handleGetWords)
 	dictionary.Post("/words", apiCfg.handleCreateWord)
 	dictionary.Get("/words/:id", apiCfg.handleGetWordById)
+	
+	dictionary.Get("/definitions", apiCfg.handleGetDefinitions)
 
 	log.Fatal(app.Listen(":3000"))
 }
