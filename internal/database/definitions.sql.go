@@ -48,6 +48,59 @@ func (q *Queries) CreateDefinition(ctx context.Context, arg CreateDefinitionPara
 	return i, err
 }
 
+const getDefinitionById = `-- name: GetDefinitionById :one
+SELECT id, created_at, updated_at, definition, part_of_speech, word_id FROM definitions
+WHERE id = $1
+`
+
+func (q *Queries) GetDefinitionById(ctx context.Context, id uuid.UUID) (Definition, error) {
+	row := q.db.QueryRowContext(ctx, getDefinitionById, id)
+	var i Definition
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Definition,
+		&i.PartOfSpeech,
+		&i.WordID,
+	)
+	return i, err
+}
+
+const getDefinitions = `-- name: GetDefinitions :many
+SELECT id, created_at, updated_at, definition, part_of_speech, word_id FROM definitions
+`
+
+func (q *Queries) GetDefinitions(ctx context.Context) ([]Definition, error) {
+	rows, err := q.db.QueryContext(ctx, getDefinitions)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Definition
+	for rows.Next() {
+		var i Definition
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Definition,
+			&i.PartOfSpeech,
+			&i.WordID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getDefinitionsByWordID = `-- name: GetDefinitionsByWordID :many
 SELECT id, created_at, updated_at, definition, part_of_speech, word_id FROM definitions
 WHERE word_id = $1
