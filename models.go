@@ -39,3 +39,22 @@ type Definition struct {
 	PartOfSpeech string    `json:"part_of_speech"`
 	WordID       uuid.UUID `json:"word_id"`
 }
+
+func databaseDefinitionToDefinition(dbDefinition database.Definition) Definition {
+	return Definition{
+		ID: dbDefinition.ID,
+		CreatedAt: dbDefinition.CreatedAt,
+		UpdatedAt: dbDefinition.UpdatedAt,
+		Definition: dbDefinition.Definition,
+		PartOfSpeech: dbDefinition.PartOfSpeech,
+		WordID: dbDefinition.WordID,
+	}
+}
+
+func databaseDefinitionsToDefinitions(dbDefinitions []database.Definition) []Definition {
+	definitions := []Definition{}
+	for _, dbDefinition := range dbDefinitions {
+		definitions = append(definitions, databaseDefinitionToDefinition(dbDefinition))
+	}
+	return definitions
+}
