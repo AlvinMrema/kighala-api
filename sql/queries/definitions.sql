@@ -6,3 +6,10 @@ RETURNING *;
 -- name: GetDefinitionsByWordID :many
 SELECT * FROM definitions
 WHERE word_id = $1;
+
+-- name: GetDefinitions :many
+SELECT * FROM definitions;
+
+-- name: GetDefinitionById :one
+SELECT * FROM definitions
+WHERE id = $1;
