@@ -87,7 +87,24 @@ func (apiCfg *apiConfig) handleGetWordById(c *fiber.Ctx) error {
 
 	results := databaseWordToWord(db)
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
+
+func (apiCfg *apiConfig) handleGetDefinitions(c *fiber.Ctx) error {
+	db, err := apiCfg.DB.GetDefinitions(c.Context())
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseDefinitionsToDefinitions(db)
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
 		"error":   false,
 		"results": results,
 	})
