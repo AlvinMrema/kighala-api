@@ -9,3 +9,13 @@ SELECT * FROM words;
 -- name: GetWordById :one
 SELECT * FROM words
 WHERE id = $1;
+
+-- name: UpdateWord :one
+UPDATE words
+SET updated_at = $2, word = $3
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteWord :exec
+DELETE FROM words
+WHERE id = $1;
