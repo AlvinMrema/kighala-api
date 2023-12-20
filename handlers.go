@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/AlvinMrema/kighala-api/internal/database"
@@ -10,22 +9,12 @@ import (
 )
 
 func (apiCfg *apiConfig) handleCreateWord(c *fiber.Ctx) error {
-	word := Word{}
+	data := Word{}
 
-	if err := c.BodyParser(&word); err != nil {
+	if err := c.BodyParser(&data); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
-		})
-	}
-
-	// Check if 'word' already exists
-	value, _ := apiCfg.DB.GetWordByValue(c.Context(), word.Word)
-
-	if value.Word == word.Word {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   fmt.Sprintf("Duplicate: '%s' already exists in Database.", value.Word),
 		})
 	}
 
@@ -34,7 +23,7 @@ func (apiCfg *apiConfig) handleCreateWord(c *fiber.Ctx) error {
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Word:      word.Word,
+		Word:      data.Word,
 	})
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
