@@ -42,6 +42,16 @@ func (q *Queries) CreateWord(ctx context.Context, arg CreateWordParams) (Word, e
 	return i, err
 }
 
+const deleteWord = `-- name: DeleteWord :exec
+DELETE FROM words
+WHERE id = $1
+`
+
+func (q *Queries) DeleteWord(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteWord, id)
+	return err
+}
+
 const getWordById = `-- name: GetWordById :one
 SELECT id, created_at, updated_at, word FROM words
 WHERE id = $1
@@ -49,23 +59,6 @@ WHERE id = $1
 
 func (q *Queries) GetWordById(ctx context.Context, id uuid.UUID) (Word, error) {
 	row := q.db.QueryRowContext(ctx, getWordById, id)
-	var i Word
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.Word,
-	)
-	return i, err
-}
-
-const getWordByValue = `-- name: GetWordByValue :one
-SELECT id, created_at, updated_at, word FROM words
-WHERE word = $1
-`
-
-func (q *Queries) GetWordByValue(ctx context.Context, word string) (Word, error) {
-	row := q.db.QueryRowContext(ctx, getWordByValue, word)
 	var i Word
 	err := row.Scan(
 		&i.ID,
@@ -106,4 +99,29 @@ func (q *Queries) GetWords(ctx context.Context) ([]Word, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateWord = `-- name: UpdateWord :one
+UPDATE words
+SET updated_at = $2, word = $3
+WHERE id = $1
+RETURNING id, created_at, updated_at, word
+`
+
+type UpdateWordParams struct {
+	ID        uuid.UUID
+	UpdatedAt time.Time
+	Word      string
+}
+
+func (q *Queries) UpdateWord(ctx context.Context, arg UpdateWordParams) (Word, error) {
+	row := q.db.QueryRowContext(ctx, updateWord, arg.ID, arg.UpdatedAt, arg.Word)
+	var i Word
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Word,
+	)
+	return i, err
 }
