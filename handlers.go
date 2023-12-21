@@ -166,6 +166,39 @@ func (apiCfg *apiConfig) handleGetDefinitionsByWordId(c *fiber.Ctx) error {
 	})
 }
 
+func (apiCfg *apiConfig) handleCreateDefinition(c *fiber.Ctx) error {
+	data := Definition{}
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Creating the 'definition' to database
+	db, err := apiCfg.DB.CreateDefinition(c.Context(), database.CreateDefinitionParams{
+		ID:           uuid.New(),
+		CreatedAt:    time.Now().UTC(),
+		UpdatedAt:    time.Now().UTC(),
+		WordID:       data.WordID,
+		Definition:   data.Definition,
+		PartOfSpeech: data.PartOfSpeech,
+	})
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseDefinitionToDefinition(db)
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
+
 func (apiCfg *apiConfig) handleGetDefinitions(c *fiber.Ctx) error {
 	db, err := apiCfg.DB.GetDefinitions(c.Context())
 	if err != nil {
