@@ -141,6 +141,31 @@ func (apiCfg *apiConfig) handleDeleteWord(c *fiber.Ctx) error {
 	})
 }
 
+func (apiCfg *apiConfig) handleGetDefinitionsByWordId(c *fiber.Ctx) error {
+	wordId, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	db, err := apiCfg.DB.GetDefinitionsByWordID(c.Context(), wordId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseDefinitionsToDefinitions(db)
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
+
 func (apiCfg *apiConfig) handleGetDefinitions(c *fiber.Ctx) error {
 	db, err := apiCfg.DB.GetDefinitions(c.Context())
 	if err != nil {
