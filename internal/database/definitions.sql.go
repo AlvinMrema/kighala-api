@@ -48,6 +48,16 @@ func (q *Queries) CreateDefinition(ctx context.Context, arg CreateDefinitionPara
 	return i, err
 }
 
+const deleteDefinition = `-- name: DeleteDefinition :exec
+DELETE FROM definitions
+WHERE id = $1
+`
+
+func (q *Queries) DeleteDefinition(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteDefinition, id)
+	return err
+}
+
 const getDefinitionById = `-- name: GetDefinitionById :one
 SELECT id, created_at, updated_at, definition, part_of_speech, word_id FROM definitions
 WHERE id = $1
@@ -134,4 +144,39 @@ func (q *Queries) GetDefinitionsByWordID(ctx context.Context, wordID uuid.UUID) 
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateDefinition = `-- name: UpdateDefinition :one
+UPDATE definitions
+SET updated_at = $2, definition = $3, part_of_speech = $4, word_id = $5
+WHERE id = $1
+RETURNING id, created_at, updated_at, definition, part_of_speech, word_id
+`
+
+type UpdateDefinitionParams struct {
+	ID           uuid.UUID
+	UpdatedAt    time.Time
+	Definition   string
+	PartOfSpeech string
+	WordID       uuid.UUID
+}
+
+func (q *Queries) UpdateDefinition(ctx context.Context, arg UpdateDefinitionParams) (Definition, error) {
+	row := q.db.QueryRowContext(ctx, updateDefinition,
+		arg.ID,
+		arg.UpdatedAt,
+		arg.Definition,
+		arg.PartOfSpeech,
+		arg.WordID,
+	)
+	var i Definition
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Definition,
+		&i.PartOfSpeech,
+		&i.WordID,
+	)
+	return i, err
 }
