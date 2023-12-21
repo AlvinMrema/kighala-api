@@ -16,10 +16,10 @@ type Word struct {
 
 func databaseWordToWord(dbWord database.Word) Word {
 	return Word{
-		ID: dbWord.ID,
+		ID:        dbWord.ID,
 		CreatedAt: dbWord.CreatedAt,
 		UpdatedAt: dbWord.UpdatedAt,
-		Word: dbWord.Word,
+		Word:      dbWord.Word,
 	}
 }
 
@@ -42,12 +42,12 @@ type Definition struct {
 
 func databaseDefinitionToDefinition(dbDefinition database.Definition) Definition {
 	return Definition{
-		ID: dbDefinition.ID,
-		CreatedAt: dbDefinition.CreatedAt,
-		UpdatedAt: dbDefinition.UpdatedAt,
-		Definition: dbDefinition.Definition,
+		ID:           dbDefinition.ID,
+		CreatedAt:    dbDefinition.CreatedAt,
+		UpdatedAt:    dbDefinition.UpdatedAt,
+		Definition:   dbDefinition.Definition,
 		PartOfSpeech: dbDefinition.PartOfSpeech,
-		WordID: dbDefinition.WordID,
+		WordID:       dbDefinition.WordID,
 	}
 }
 
