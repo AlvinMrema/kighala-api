@@ -62,7 +62,7 @@ func main() {
 	dictionary.Put("/words/:id", apiCfg.handleUpdateWord)
 	dictionary.Delete("/words/:id", apiCfg.handleDeleteWord)
 	dictionary.Get("/words/:id/definitions", apiCfg.handleGetDefinitionsByWordId)
-	
+
 	dictionary.Get("/definitions", apiCfg.handleGetDefinitions)
 	dictionary.Post("/definitions", apiCfg.handleCreateDefinition)
 	dictionary.Get("/definitions/:id", apiCfg.handleGetDefinitionById)
