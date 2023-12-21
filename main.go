@@ -65,6 +65,7 @@ func main() {
 	
 	dictionary.Get("/definitions", apiCfg.handleGetDefinitions)
 	dictionary.Post("/definitions", apiCfg.handleCreateDefinition)
+	dictionary.Get("/definitions/:id", apiCfg.handleGetDefinitionById)
 
 	log.Fatal(app.Listen(":3000"))
 }
