@@ -279,3 +279,26 @@ func (apiCfg *apiConfig) handleUpdateDefinition(c *fiber.Ctx) error {
 		"results": results,
 	})
 }
+
+func (apiCfg *apiConfig) handleDeleteDefinition(c *fiber.Ctx) error {
+	id, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	err = apiCfg.DB.DeleteDefinition(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"error":   false,
+		"results": "Deleted Successfully",
+	})
+}
