@@ -240,3 +240,42 @@ func (apiCfg *apiConfig) handleGetDefinitionById(c *fiber.Ctx) error {
 		"results": results,
 	})
 }
+
+func (apiCfg *apiConfig) handleUpdateDefinition(c *fiber.Ctx) error {
+	id, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	data := Definition{}
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	db, err := apiCfg.DB.UpdateDefinition(c.Context(), database.UpdateDefinitionParams{
+		ID:           id,
+		UpdatedAt:    time.Now().UTC(),
+		Definition:   data.Definition,
+		PartOfSpeech: data.PartOfSpeech,
+		WordID:       data.WordID,
+	})
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseDefinitionToDefinition(db)
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
