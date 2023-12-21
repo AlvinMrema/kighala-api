@@ -57,7 +57,7 @@ func (apiCfg *apiConfig) handleGetWords(c *fiber.Ctx) error {
 }
 
 func (apiCfg *apiConfig) handleGetWordById(c *fiber.Ctx) error {
-	wordId, err := uuid.Parse(c.Params("id"))
+	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -65,7 +65,7 @@ func (apiCfg *apiConfig) handleGetWordById(c *fiber.Ctx) error {
 		})
 	}
 
-	db, err := apiCfg.DB.GetWordById(c.Context(), wordId)
+	db, err := apiCfg.DB.GetWordById(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -82,7 +82,7 @@ func (apiCfg *apiConfig) handleGetWordById(c *fiber.Ctx) error {
 }
 
 func (apiCfg *apiConfig) handleUpdateWord(c *fiber.Ctx) error {
-	wordId, err := uuid.Parse(c.Params("id"))
+	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -99,7 +99,7 @@ func (apiCfg *apiConfig) handleUpdateWord(c *fiber.Ctx) error {
 	}
 
 	db, err := apiCfg.DB.UpdateWord(c.Context(), database.UpdateWordParams{
-		ID:        wordId,
+		ID:        id,
 		UpdatedAt: time.Now().UTC(),
 		Word:      data.Word,
 	})
@@ -119,7 +119,7 @@ func (apiCfg *apiConfig) handleUpdateWord(c *fiber.Ctx) error {
 }
 
 func (apiCfg *apiConfig) handleDeleteWord(c *fiber.Ctx) error {
-	wordId, err := uuid.Parse(c.Params("id"))
+	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -127,7 +127,7 @@ func (apiCfg *apiConfig) handleDeleteWord(c *fiber.Ctx) error {
 		})
 	}
 
-	err = apiCfg.DB.DeleteWord(c.Context(), wordId)
+	err = apiCfg.DB.DeleteWord(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -142,7 +142,7 @@ func (apiCfg *apiConfig) handleDeleteWord(c *fiber.Ctx) error {
 }
 
 func (apiCfg *apiConfig) handleGetDefinitionsByWordId(c *fiber.Ctx) error {
-	wordId, err := uuid.Parse(c.Params("id"))
+	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -150,7 +150,7 @@ func (apiCfg *apiConfig) handleGetDefinitionsByWordId(c *fiber.Ctx) error {
 		})
 	}
 
-	db, err := apiCfg.DB.GetDefinitionsByWordID(c.Context(), wordId)
+	db, err := apiCfg.DB.GetDefinitionsByWordID(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
