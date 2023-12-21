@@ -13,3 +13,13 @@ SELECT * FROM definitions;
 -- name: GetDefinitionById :one
 SELECT * FROM definitions
 WHERE id = $1;
+
+-- name: UpdateDefinition :one
+UPDATE definitions
+SET updated_at = $2, definition = $3, part_of_speech = $4, word_id = $5
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteDefinition :exec
+DELETE FROM definitions
+WHERE id = $1;
