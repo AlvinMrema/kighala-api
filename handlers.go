@@ -215,3 +215,28 @@ func (apiCfg *apiConfig) handleGetDefinitions(c *fiber.Ctx) error {
 		"results": results,
 	})
 }
+
+func (apiCfg *apiConfig) handleGetDefinitionById(c *fiber.Ctx) error {
+	id, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	db, err := apiCfg.DB.GetDefinitionById(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	results := databaseDefinitionToDefinition(db)
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"error":   false,
+		"results": results,
+	})
+}
