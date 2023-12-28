@@ -1,9 +1,9 @@
-package main
+package models
 
 import (
 	"time"
 
-	"github.com/AlvinMrema/kighala-api/internal/database"
+	"github.com/AlvinMrema/kighala-api/platform/database/sqlc"
 	"github.com/google/uuid"
 )
 
@@ -14,7 +14,7 @@ type Word struct {
 	Word      string    `json:"word"`
 }
 
-func databaseWordToWord(dbWord database.Word) Word {
+func DatabaseWordToWord(dbWord database.Word) Word {
 	return Word{
 		ID:        dbWord.ID,
 		CreatedAt: dbWord.CreatedAt,
@@ -23,10 +23,10 @@ func databaseWordToWord(dbWord database.Word) Word {
 	}
 }
 
-func databaseWordsToWords(dbWords []database.Word) []Word {
+func DatabaseWordsToWords(dbWords []database.Word) []Word {
 	words := []Word{}
 	for _, dbWord := range dbWords {
-		words = append(words, databaseWordToWord(dbWord))
+		words = append(words, DatabaseWordToWord(dbWord))
 	}
 	return words
 }
@@ -40,7 +40,7 @@ type Definition struct {
 	WordID       uuid.UUID `json:"word_id"`
 }
 
-func databaseDefinitionToDefinition(dbDefinition database.Definition) Definition {
+func DatabaseDefinitionToDefinition(dbDefinition database.Definition) Definition {
 	return Definition{
 		ID:           dbDefinition.ID,
 		CreatedAt:    dbDefinition.CreatedAt,
@@ -51,10 +51,10 @@ func databaseDefinitionToDefinition(dbDefinition database.Definition) Definition
 	}
 }
 
-func databaseDefinitionsToDefinitions(dbDefinitions []database.Definition) []Definition {
+func DatabaseDefinitionsToDefinitions(dbDefinitions []database.Definition) []Definition {
 	definitions := []Definition{}
 	for _, dbDefinition := range dbDefinitions {
-		definitions = append(definitions, databaseDefinitionToDefinition(dbDefinition))
+		definitions = append(definitions, DatabaseDefinitionToDefinition(dbDefinition))
 	}
 	return definitions
 }
