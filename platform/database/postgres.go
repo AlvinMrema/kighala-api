@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	// "fmt"
+	"fmt"
 	"log"
 	"os"
 
@@ -33,10 +33,10 @@ func PostgreSQLConnection() (*sql.DB, error) {
 	// db.SetConnMaxLifetime(time.Duration(maxLifetimeConn)) // 0, connections are reused forever
 
 	// Try to ping database.
-	// if err := db.Ping(); err != nil {
-	//     defer db.Close() // close database connection
-	//     return nil, fmt.Errorf("error, not sent ping to database, %w", err)
-	// }
+	if err := db.Ping(); err != nil {
+		defer db.Close() // close database connection
+		return nil, fmt.Errorf("error, not sent ping to database, %w", err)
+	}
 
 	return db, nil
 }

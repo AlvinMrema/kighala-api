@@ -3,8 +3,6 @@ package controllers
 import (
 	"time"
 
-	// "github.com/AlvinMrema/kighala-api/internal/database"
-	// "github.com/AlvinMrema/kighala-api/internal/models"
 	"github.com/AlvinMrema/kighala-api/app/models"
 	dbConfig "github.com/AlvinMrema/kighala-api/platform/database"
 	database "github.com/AlvinMrema/kighala-api/platform/database/sqlc"

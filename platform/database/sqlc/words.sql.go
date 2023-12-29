@@ -3,7 +3,7 @@
 //   sqlc v1.24.0
 // source: words.sql
 
-package database
+package sqlc
 
 import (
 	"context"

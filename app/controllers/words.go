@@ -5,7 +5,7 @@ import (
 
 	"github.com/AlvinMrema/kighala-api/app/models"
 	dbConfig "github.com/AlvinMrema/kighala-api/platform/database"
-	"github.com/AlvinMrema/kighala-api/platform/database/sqlc"
+	database "github.com/AlvinMrema/kighala-api/platform/database/sqlc"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )

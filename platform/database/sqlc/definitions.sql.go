@@ -3,7 +3,7 @@
 //   sqlc v1.24.0
 // source: definitions.sql
 
-package database
+package sqlc
 
 import (
 	"context"

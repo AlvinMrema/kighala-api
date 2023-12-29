@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/AlvinMrema/kighala-api/platform/database/sqlc"
+	database "github.com/AlvinMrema/kighala-api/platform/database/sqlc"
 	"github.com/google/uuid"
 )
 
