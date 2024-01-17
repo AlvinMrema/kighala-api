@@ -3,14 +3,14 @@ package main
 import (
 	"log"
 	"os"
+	// "os"
 
-	"github.com/AlvinMrema/kighala-api/app/controllers"
+	"github.com/AlvinMrema/kighala-api/pkg/routes"
+	"github.com/AlvinMrema/kighala-api/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 )
-
-
 
 func main() {
 	err := godotenv.Load(".env")
@@ -35,21 +35,10 @@ func main() {
 	// }))
 	app.Use(cors.New())
 
-	api := app.Group("/api")
+	routes.PublicRoutes(app)
+	routes.PrivateRoutes(app)
+	routes.NotFoundRoute(app)
 
-	dictionary := api.Group("/kamusi")
-	dictionary.Get("/words", controllers.GetWords)
-	dictionary.Post("/words", controllers.CreateWord)
-	dictionary.Get("/words/:id", controllers.GetWordById)
-	dictionary.Put("/words/:id", controllers.UpdateWord)
-	dictionary.Delete("/words/:id", controllers.DeleteWord)
-	dictionary.Get("/words/:id/definitions", controllers.GetDefinitionsByWordId)
-
-	dictionary.Get("/definitions", controllers.GetDefinitions)
-	dictionary.Post("/definitions", controllers.CreateDefinition)
-	dictionary.Get("/definitions/:id", controllers.GetDefinitionById)
-	dictionary.Put("/definitions/:id", controllers.UpdateDefinition)
-	dictionary.Delete("/definitions/:id", controllers.DeleteDefinition)
-
-	log.Fatal(app.Listen(":3000"))
+	// log.Fatal(app.Listen(":3000"))
+	utils.StartServer(portString, app)
 }

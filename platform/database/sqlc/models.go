@@ -19,6 +19,15 @@ type Definition struct {
 	WordID       uuid.UUID
 }
 
+type User struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Username  string
+	Password  string
+	Role      string
+}
+
 type Word struct {
 	ID        uuid.UUID
 	CreatedAt time.Time
