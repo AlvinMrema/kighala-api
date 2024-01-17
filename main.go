@@ -3,20 +3,21 @@ package main
 import (
 	"log"
 	"os"
+
 	// "os"
 
 	"github.com/AlvinMrema/kighala-api/pkg/routes"
 	"github.com/AlvinMrema/kighala-api/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	portString := os.Getenv("PORT")
 	if portString == "" {
