@@ -42,7 +42,7 @@ func StartServer(port string, a *fiber.App) {
 	// 	log.Printf("Oops... Server is not running! Reason: %v", err)
 	// }
 
-	portString := ":" + port // fmt.Sprintf(":%v", port)
+	portString := "0.0.0.0:" + port // fmt.Sprintf(":%v", port)
 	if err := a.Listen(portString); err != nil {
 		log.Printf("Oops... Server is not running! Reason: %v", err)
 	}
