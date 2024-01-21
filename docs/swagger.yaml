@@ -27,7 +27,7 @@ definitions:
       word:
         type: string
     type: object
-host: localhost:3000
+host: 0.0.0.0:3000
 info:
   contact:
     email: sonalpha023@gmail.com
