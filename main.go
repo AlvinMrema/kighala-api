@@ -23,7 +23,7 @@ import (
 // @contact.email sonalpha023@gmail.com
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:3000
+// @host 0.0.0.0:3000
 // @BasePath /api/v1
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
