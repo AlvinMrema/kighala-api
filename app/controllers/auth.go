@@ -15,17 +15,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// SignUp func for user signin.
+// @Description User signup.
+// @Summary user signup
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param user body models.AuthCredentials true "Username and Password"
+// @Success 201 {object} models.User
+// @Router /auth/signup [post]
 func SignUp(c *fiber.Ctx) error {
-	// Create database connection.
-	db, err := dbConfig.OpenDBConnection()
-	if err != nil {
-		// Return status 500 and database connection error.
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-
 	data := models.User{}
 	if err := c.BodyParser(&data); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -43,6 +42,16 @@ func SignUp(c *fiber.Ctx) error {
 	}
 
 	role := utils.User.String()
+
+	// Create database connection.
+	db, err := dbConfig.OpenDBConnection()
+	if err != nil {
+		// Return status 500 and database connection error.
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
 
 	// Creating the 'user' to database
 	dbResult, err := db.DB.CreateUser(c.Context(), database.CreateUserParams{
@@ -66,7 +75,24 @@ func SignUp(c *fiber.Ctx) error {
 	})
 }
 
+// SignIn func for user signin.
+// @Description User signin.
+// @Summary user signin
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param user body models.AuthCredentials true "Username and Password"
+// @Success 201 {object} models.User
+// @Router /auth/signin [post]
 func SignIn(c *fiber.Ctx) error {
+	data := models.User{}
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
 	// Create database connection.
 	db, err := dbConfig.OpenDBConnection()
 	if err != nil {
@@ -76,22 +102,6 @@ func SignIn(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-
-	data := models.User{}
-	if err := c.BodyParser(&data); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-
-	// hashPassword, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-	// 		"error": true,
-	// 		"msg":   err.Error(),
-	// 	})
-	// }
 
 	dbResult, err := db.DB.GetUserByUsername(c.Context(), data.Username)
 	if err != nil {

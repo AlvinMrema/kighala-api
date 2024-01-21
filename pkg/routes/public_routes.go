@@ -13,7 +13,7 @@ func PublicRoutes(a *fiber.App) {
 
 	auth := route.Group("/auth")
 	auth.Post("/signin", controllers.SignIn)
-	auth.Post("signup", controllers.SignUp)
+	auth.Post("/signup", controllers.SignUp)
 
 	dictionary := route.Group("/kamusi")
 	dictionary.Get("/words", controllers.GetWords)

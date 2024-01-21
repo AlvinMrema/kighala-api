@@ -10,6 +10,15 @@ import (
 	"github.com/google/uuid"
 )
 
+// GetDefinitionsByWordId func get definitions associated by word ID.
+// @Description Get definitions by word ID.
+// @Summary get definitions by word ID
+// @Tags Words
+// @Accept json
+// @Produce json
+// @Param id path string true "Word ID"
+// @Success 200 {object} models.Word
+// @Router /kamusi/words/{id}/definitions [get]
 func GetDefinitionsByWordId(c *fiber.Ctx) error {
 	// Create database connection.
 	db, err := dbConfig.OpenDBConnection()
@@ -38,7 +47,7 @@ func GetDefinitionsByWordId(c *fiber.Ctx) error {
 
 	results := models.DatabaseDefinitionsToDefinitions(dbResult)
 
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"error":   false,
 		"results": results,
 	})
