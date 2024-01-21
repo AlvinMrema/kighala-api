@@ -41,15 +41,15 @@ func main() {
 
 	app := fiber.New()
 
-	// app.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     "https://*, http://*",
-	// 	AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
-	// 	AllowHeaders:     "*",
-	// 	ExposeHeaders:    "Link",
-	// 	AllowCredentials: false,
-	// 	MaxAge:           300,
-	// }))
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "https://*, http://*",
+		AllowMethods:     "GET, POST, PUT, DELETE",
+		AllowHeaders:     "*",
+		ExposeHeaders:    "Link",
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
+	// app.Use(cors.New())
 
 	// Routes.
 	routes.SwaggerRoute(app)  // Register a route for API Docs (Swagger).
