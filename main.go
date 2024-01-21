@@ -42,10 +42,10 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "https://*, http://*",
+		AllowOrigins:     "https://kighala-api-production.up.railway.app/, http://*",
 		AllowMethods:     "GET, POST, PUT, DELETE",
-		AllowHeaders:     "*",
-		ExposeHeaders:    "Link",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		// ExposeHeaders:    "Link",
 		AllowCredentials: false,
 		MaxAge:           300,
 	}))
